@@ -9,7 +9,7 @@ import static pacman.game.Constants.*;
 
 /*
  * Ghost team controller as part of the starter package - simply upload this file as a zip called
- * MyGhosts.zip and you will be entered into the rankings - as simple as that! Feel free to modify 
+ * MyGhosts.zip, and you will be entered into the rankings - as simple as that! Feel free to modify
  * it or to start from scratch, using the classes supplied with the original software. Best of luck!
  * 
  * This ghost controller does the following:

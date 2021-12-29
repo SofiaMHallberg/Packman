@@ -27,12 +27,12 @@ import static pacman.game.Constants.*;
  * pills have been eaten and updates the game state accordingly.
  * 
  * All other methods are to access the gamestate and to compute numerous aspects such as directions to taken
- * given a target or a shortest path from a to b. All shortest path distances from any node to any other node
+ * given a target or shortest path from a to b. All shortest path distances from any node to any other node
  * are pre-computed and loaded from file. This makes these methods more efficient. Note about the ghosts: ghosts
- * are not allowed to reverse. Hence it is not possible to simply look up the shortest path distance. Instead,
+ * are not allowed to reverse. Hence, it is not possible to simply look up the shortest path distance. Instead,
  * one can approximate this greedily or use A* to compute it properly. The former is somewhat quicker and has
  * a low error rate. The latter takes a bit longer but is absolutely accurate. We use the pre-computed shortest
- * path distances as admissable heuristic so it is very efficient.
+ * path distances as admissable heuristic, so it is very efficient.
  */
 public final class Game
 {
