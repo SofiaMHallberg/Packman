@@ -8,14 +8,11 @@ public class DecisionTreeCreator {
     private Dataset dataset;
     private LinkedList<Tuple> trainingDataSet;
     private LinkedList<Tuple> testDataSet;
-//    private AttributeList attributeList;
-
 
     public DecisionTreeCreator() {
         dataset = new Dataset();
         trainingDataSet = dataset.getTrainingDataSet();
         testDataSet = dataset.getTestDataSet();
-//        attributeList = new AttributeList();
         buildTree(trainingDataSet, new AttributeList());
     }
 
@@ -37,23 +34,46 @@ public class DecisionTreeCreator {
         node.setAttribute(thisAttribute);
         attributeList.removeAttribute(thisAttribute);
 
-
         SubsetCreator creator = new SubsetCreator(dataSet, thisAttribute);
         LinkedList<LinkedList<Tuple>> subSetList = creator.getSubSetList();
 
         for (int i = 0; i < subSetList.size(); i++) {
             Node childNode = new Node();
-            Edge edge = new Edge(node, childNode, thisAttribute)
+            Edge edge = new Edge(node, childNode, getValue(subSetList.get(i).get(0), thisAttribute));
+            node.addEdge(edge);
             if (subSetList.get(i).isEmpty()) {
                 childNode.setMove(majorityClass(subSetList.get(i)));
             }
             else {
                 childNode = buildTree(subSetList.get(i), attributeList);
-
             }
         }
-
         return null;
+    }
+
+    public String getValue(Tuple tuple, Attribute attribute) {
+        switch (attribute) {
+            case PACMAN_POSITION:
+                return tuple.getPosition().toString();
+            case BLINKY_DISTANCE:
+                return tuple.getBlinkyDistance().toString();
+            case INKY_DISTANCE:
+                return tuple.getInkyDistance().toString();
+            case PINKY_DISTANCE:
+                return tuple.getPinkyDistance().toString();
+            case SUE_DISTANCE:
+                return tuple.getSueDistance().toString();
+            case BLINKY_EDIBLE:
+                return String.valueOf(tuple.getBlinkyEdible());
+            case INKY_EDIBLE:
+                return String.valueOf(tuple.getInkyEdible());
+            case PINKY_EDIBLE:
+                return String.valueOf(tuple.getPinkyEdible());
+            case SUE_EDIBLE:
+                return String.valueOf(tuple.getSueEdible());
+            default:
+                return null;
+        }
     }
 
 
