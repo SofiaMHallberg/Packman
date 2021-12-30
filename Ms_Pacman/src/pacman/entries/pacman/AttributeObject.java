@@ -8,9 +8,16 @@ public class AttributeObject implements Comparable<AttributeObject>{
         this.name=name;
         this.gain=gain;
     }
+    public AttributeObject(Attribute name) {
+        this.name=name;
+    }
 
     public double getGain() {
         return gain;
+    }
+
+    public void setGain(double gain) {
+        this.gain=gain;
     }
 
     public Attribute getAttribute() {

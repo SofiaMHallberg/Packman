@@ -5,17 +5,15 @@ import java.util.LinkedList;
 
 public class Dataset {
     private BufferedReader reader;
-    LinkedList<String[]> trainingDataSet;
-    LinkedList<String[]> testDataSet;
+    LinkedList<Tuple> trainingDataSet;
+    LinkedList<Tuple> testDataSet;
 
     public void readData() throws IOException {
         reader=new BufferedReader(new InputStreamReader(new FileInputStream("myData/trainingData.txt")));
-        LinkedList<String[]> dataSet=new LinkedList<>();
-
-        String[] tuple;
+        LinkedList<Tuple> dataSet=new LinkedList<>();
 
         while (reader.ready()) {
-            tuple=reader.readLine().split(";");
+            Tuple tuple=new Tuple(reader.readLine().split(";"));
             dataSet.add(tuple);
         }
 
@@ -28,7 +26,6 @@ public class Dataset {
             for (int i=0; i<4; i++) {
                 trainingDataSet.add(dataSet.remove());
             }
-
             testDataSet.add(dataSet.remove());
 
             if(dataSet.size()<5)
@@ -36,11 +33,11 @@ public class Dataset {
         }
     }
 
-    public LinkedList<String[]> getTrainingDataSet() {
+    public LinkedList<Tuple> getTrainingDataSet() {
         return trainingDataSet;
     }
 
-    public LinkedList<String[]> getTestDataSet() {
+    public LinkedList<Tuple> getTestDataSet() {
         return testDataSet;
     }
 }
