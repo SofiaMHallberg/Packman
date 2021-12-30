@@ -8,6 +8,14 @@ public class Dataset {
     LinkedList<Tuple> trainingDataSet;
     LinkedList<Tuple> testDataSet;
 
+    public Dataset() {
+        try {
+            readData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void readData() throws IOException {
         reader=new BufferedReader(new InputStreamReader(new FileInputStream("myData/trainingData.txt")));
         LinkedList<Tuple> dataSet=new LinkedList<>();

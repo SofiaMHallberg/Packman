@@ -9,9 +9,11 @@ public class Node {
     private Constants.MOVE move;
     private LinkedList<Edge> edges;
     private boolean isLeaf = false;
+    private int nodeNbr;
 
 
-    public Node() {
+    public Node(int nodeNbr) {
+        this.nodeNbr = nodeNbr;
         edges = new LinkedList<>();
     }
 

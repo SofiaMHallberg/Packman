@@ -11,6 +11,9 @@ import pacman.game.Game;
  */
 public class MyPacMan extends Controller<MOVE>
 {
+	public MyPacMan() {
+		DecisionTreeCreator dtCreator = new DecisionTreeCreator();
+	}
 	private MOVE myMove=MOVE.NEUTRAL;
 	
 	public MOVE getMove(Game game, long timeDue) 
@@ -18,5 +21,9 @@ public class MyPacMan extends Controller<MOVE>
 		//Place your game logic here to play the game as Ms Pac-Man
 		
 		return myMove;
+	}
+
+	public static void main(String[] args) {
+		new MyPacMan();
 	}
 }

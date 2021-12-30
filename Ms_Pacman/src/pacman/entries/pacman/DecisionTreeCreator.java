@@ -8,16 +8,23 @@ public class DecisionTreeCreator {
     private Dataset dataset;
     private LinkedList<Tuple> trainingDataSet;
     private LinkedList<Tuple> testDataSet;
+    private int nodeNbr;
+    private LinkedList<LinkedList<Node>> adjacencyList;
 
     public DecisionTreeCreator() {
         dataset = new Dataset();
         trainingDataSet = dataset.getTrainingDataSet();
         testDataSet = dataset.getTestDataSet();
-        buildTree(trainingDataSet, new AttributeList());
+        nodeNbr = 0;
+        adjacencyList = new LinkedList<>();
+        Node root = buildTree(trainingDataSet, new AttributeList());
     }
 
+
     public Node buildTree(LinkedList<Tuple> dataSet, AttributeList attributeList) {
-        Node node = new Node();
+        Node node = new Node(nodeNbr++);
+        LinkedList<Node> listOfNodes = new LinkedList<>();
+        listOfNodes.add(node);
         Constants.MOVE move = multipleClasses(dataSet);
         if (move != null) {
             node.setMove(move);
@@ -38,13 +45,16 @@ public class DecisionTreeCreator {
         LinkedList<LinkedList<Tuple>> subSetList = creator.getSubSetList();
 
         for (int i = 0; i < subSetList.size(); i++) {
-            Node childNode = new Node();
+            Node childNode = new Node(nodeNbr++);
+            listOfNodes.add(childNode);
+            System.out.println(subSetList.get(i));
             Edge edge = new Edge(node, childNode, getValue(subSetList.get(i).get(0), thisAttribute));
             node.addEdge(edge);
             if (subSetList.get(i).isEmpty()) {
                 childNode.setMove(majorityClass(subSetList.get(i)));
             }
             else {
+                
                 childNode = buildTree(subSetList.get(i), attributeList);
             }
         }
@@ -112,6 +122,7 @@ public class DecisionTreeCreator {
     }
 
     private Constants.MOVE multipleClasses(LinkedList<Tuple> dataSet) {
+        System.out.println(dataSet.size());
         Constants.MOVE myClass = dataSet.getFirst().getMoveClass();
         for (int i = 1; i < dataSet.size(); i++) {
             if (dataSet.get(i).getMoveClass() != myClass)
