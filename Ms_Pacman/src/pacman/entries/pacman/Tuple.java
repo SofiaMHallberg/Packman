@@ -36,7 +36,38 @@ public class Tuple {
         return position;
     }
 
-    public Boolean getBlinkyEdible() {
+    public boolean getBooleanValue(Attribute attribute) {
+        switch (attribute) {
+            case BLINKY_EDIBLE:
+                return blinkyEdible;
+            case INKY_EDIBLE:
+                return inkyEdible;
+            case PINKY_EDIBLE:
+                return pinkyEdible;
+            case SUE_EDIBLE:
+                return sueEdible;
+        }
+        return true; //OBS! KONTROLLERA SÅ DETTA INTE SKER
+    }
+
+    public DataTuple.DiscreteTag getDiscreteValue(Attribute attribute) {
+        switch (attribute) {
+            case PACMAN_POSITION:
+                return position;
+            case BLINKY_DISTANCE:
+                return blinkyDistance;
+            case INKY_DISTANCE:
+                return inkyDistance;
+            case PINKY_DISTANCE:
+                return pinkyDistance;
+            case SUE_DISTANCE:
+                return sueDistance;
+            default:
+                return null;
+        }
+    }
+
+    public boolean getBlinkyEdible() {
         return blinkyEdible;
     }
 
