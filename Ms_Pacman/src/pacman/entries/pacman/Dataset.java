@@ -8,6 +8,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
+/**
+ * The class responsible for reading and storing the dataset from a file. Every fifth tuple in the file is used for
+ * the test dataset.
+ *
+ * @author Sofia Hallberg, Oscar Kareld
+ * 04/01-2022
+ */
 public class Dataset {
 
     private BufferedReader reader;

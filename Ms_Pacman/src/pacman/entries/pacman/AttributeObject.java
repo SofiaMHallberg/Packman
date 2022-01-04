@@ -1,5 +1,11 @@
 package pacman.entries.pacman;
 
+/**
+ * A class for storing attributes and gain.
+ *
+ * @author Sofia Hallberg, Oscar Kareld
+ * 04/01-2022
+ */
 public class AttributeObject implements Comparable<AttributeObject>{
     private double gain;
     private Attribute name;

@@ -5,6 +5,12 @@ import pacman.game.Constants;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+/**
+ * This class stores all information necessary for the nodes in the decision tree.
+ *
+ * @author Sofia Hallberg, Oscar Kareld
+ * 04/01-2022
+ */
 public class Node {
     private Attribute attribute;
     private Constants.MOVE move;

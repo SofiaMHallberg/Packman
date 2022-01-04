@@ -10,12 +10,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * This is our implementation of a Pacman agent, that creates a decision tree based on the algorithm provided for the
+ * assignment in the DA272A - Artificial Intelligence course.
+ *
+ * @author Sofia Hallberg, Oscar Kareld
+ * 04/01-2022
+ */
 public class MyPacMan extends Controller<Constants.MOVE>
 {
     private DecisionTreeCreator dtCreator;
     private Node root;
     private LinkedList<DataTuple> trainingDataSet;
     private LinkedList<DataTuple> testDataSet;
+
 
     public MyPacMan() throws CloneNotSupportedException {
         dtCreator = new DecisionTreeCreator();
@@ -25,6 +33,10 @@ public class MyPacMan extends Controller<Constants.MOVE>
 //        dtCreator.printNodeList();
     }
 
+    /**
+     * Prints the tree.
+     * @param node
+     */
     private void printTree(Node node) {
         System.out.println("Next node:");
         if(node.isLeafNode())
@@ -70,15 +82,24 @@ public class MyPacMan extends Controller<Constants.MOVE>
         return list;
     }
 
-   // private Constants.MOVE myMove= Constants.MOVE.NEUTRAL;
-
+    /**
+     * The method called by the controller for collecting the chosen move by the AI agent.
+     * @param game A copy of the current game
+     * @param timeDue The time the next move is due
+     * @return the selected move
+     */
     public Constants.MOVE getMove(Game game, long timeDue)
     {
-        DataTuple newTuple=new DataTuple(game,null);
-        Constants.MOVE myMove=traverseTree(root, newTuple);
-        return myMove;
+        DataTuple newTuple= trainingDataSet.removeFirst(); //new DataTuple(game,null);
+        return traverseTree(root, newTuple);
     }
 
+    /**
+     * This method traverses the generated decision tree.
+     * @param node the root node.
+     * @param tuple the
+     * @return
+     */
     private Constants.MOVE traverseTree(Node node, DataTuple tuple) {
         Constants.MOVE nextMove=null;
 //        System.out.println("testing if for node nbr "+node.getNodeNbr());

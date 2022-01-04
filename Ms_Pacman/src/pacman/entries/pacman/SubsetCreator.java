@@ -5,6 +5,13 @@ import sun.awt.image.ImageWatched;
 
 import java.util.LinkedList;
 
+/**
+ * This class is used when generating the decision tree to create a subset of a bigger dataset. There is one
+ * funtion for each of the possible subset groups.
+ *
+ * @author Sofia Hallberg, Oscar Kareld
+ * 04/01-2022
+ */
 public class SubsetCreator {
 
     private LinkedList<DataTuple> subSetVeryLow;
