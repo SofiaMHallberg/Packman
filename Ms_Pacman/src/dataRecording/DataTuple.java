@@ -1,5 +1,6 @@
 package dataRecording;
 
+import pacman.entries.pacman.Attribute;
 import pacman.game.Constants;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
@@ -142,32 +143,105 @@ public class DataTuple {
 		StringBuilder stringbuilder = new StringBuilder();
 
 		stringbuilder.append(this.DirectionChosen + ";");
-		//stringbuilder.append(this.mazeIndex + ";");
-		//stringbuilder.append(this.currentLevel + ";");
-		stringbuilder.append(this.discretizePosition(pacmanPosition) + ";");
-		//stringbuilder.append(this.pacmanLivesLeft + ";");
-		//stringbuilder.append(this.currentScore + ";");
-		//stringbuilder.append(this.totalGameTime + ";");
-		//stringbuilder.append(this.currentLevelTime + ";");
-		//stringbuilder.append(this.numOfPillsLeft + ";");
-		//stringbuilder.append(this.numOfPowerPillsLeft + ";");
+		stringbuilder.append(this.mazeIndex + ";");
+		stringbuilder.append(this.currentLevel + ";");
+		stringbuilder.append(this.pacmanPosition + ";");
+		stringbuilder.append(this.pacmanLivesLeft + ";");
+		stringbuilder.append(this.currentScore + ";");
+		stringbuilder.append(this.totalGameTime + ";");
+		stringbuilder.append(this.currentLevelTime + ";");
+		stringbuilder.append(this.numOfPillsLeft + ";");
+		stringbuilder.append(this.numOfPowerPillsLeft + ";");
 		stringbuilder.append(this.isBlinkyEdible + ";");
 		stringbuilder.append(this.isInkyEdible + ";");
 		stringbuilder.append(this.isPinkyEdible + ";");
 		stringbuilder.append(this.isSueEdible + ";");
-		stringbuilder.append(this.discretizeDistance(blinkyDist) + ";");
-		stringbuilder.append(this.discretizeDistance(inkyDist) + ";");
-		stringbuilder.append(this.discretizeDistance(pinkyDist) + ";");
-		stringbuilder.append(this.discretizeDistance(sueDist) + ";");
-//		stringbuilder.append(this.blinkyDir + ";");
-//		stringbuilder.append(this.inkyDir + ";");
-//		stringbuilder.append(this.pinkyDir + ";");
-//		stringbuilder.append(this.sueDir + ";");
-		//stringbuilder.append(this.numberOfNodesInLevel + ";");
-		//stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
-		//stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
+		stringbuilder.append(this.blinkyDist + ";");
+		stringbuilder.append(this.inkyDist + ";");
+		stringbuilder.append(this.pinkyDist + ";");
+		stringbuilder.append(this.sueDist + ";");
+		stringbuilder.append(this.blinkyDir + ";");
+		stringbuilder.append(this.inkyDir + ";");
+		stringbuilder.append(this.pinkyDir + ";");
+		stringbuilder.append(this.sueDir + ";");
+		stringbuilder.append(this.numberOfNodesInLevel + ";");
+		stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
+		stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
 
 		return stringbuilder.toString();
+	}
+
+	public MOVE getMove() {				// egna
+		return this.DirectionChosen;
+	}
+
+	public DiscreteTag getPosition() {
+		return this.discretizePosition(pacmanPosition);
+	}
+
+	public DiscreteTag getBlinkyDistance() {
+		return this.discretizeDistance(blinkyDist);
+	}
+
+	public DiscreteTag getInkyDistance() {
+		return this.discretizeDistance(inkyDist);
+	}
+
+	public DiscreteTag getPinkyDistance() {
+		return this.discretizeDistance(pinkyDist);
+	}
+
+	public DiscreteTag getSueDistance() {
+		return this.discretizeDistance(sueDist);
+	}
+
+	public boolean getBlinkyEdible() {
+		return this.isBlinkyEdible;
+	}
+
+	public boolean getInkyEdible() {
+		return this.isInkyEdible;
+	}
+
+	public boolean getPinkyEdible() {
+		return this.isPinkyEdible;
+	}
+
+	public boolean getSueEdible() {
+		return this.isSueEdible;
+	}
+
+
+	public DiscreteTag getDiscreteValue(Attribute attribute) {
+		switch (attribute) {
+			case PACMAN_POSITION:
+				return discretizePosition(pacmanPosition);
+			case BLINKY_DISTANCE:
+				return discretizeDistance(blinkyDist);
+			case INKY_DISTANCE:
+				return discretizeDistance(inkyDist);
+			case PINKY_DISTANCE:
+				return discretizeDistance(pinkyDist);
+			case SUE_DISTANCE:
+				return discretizeDistance(sueDist);
+		}
+		System.out.println("Attribute is missing in DataTuple.getDiscreteValue");
+		return null;
+	}
+
+	public boolean getBooleanValue(Attribute attribute) {
+		switch (attribute) {
+			case BLINKY_EDIBLE:
+				return isBlinkyEdible;
+			case INKY_EDIBLE:
+				return isInkyEdible;
+			case PINKY_EDIBLE:
+				return isPinkyEdible;
+			case SUE_EDIBLE:
+				return isSueEdible;
+		}
+		System.out.println("Attribute is missing in DataTuple.getBooleanValue");
+		return true; //OBS! KONTROLLERA SÅ DETTA INTE SKER
 	}
 
 	/**

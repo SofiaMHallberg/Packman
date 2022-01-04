@@ -1,6 +1,7 @@
 package pacman.entries.pacman;
 
-import org.w3c.dom.Attr;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public enum Attribute {
     CLASS,
@@ -14,7 +15,5 @@ public enum Attribute {
     PINKY_DISTANCE,
     SUE_DISTANCE;
 
-    public void setGain(Attribute attribute, double gain) {
 
-    }
 }

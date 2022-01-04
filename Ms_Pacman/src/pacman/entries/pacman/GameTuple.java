@@ -1,9 +1,9 @@
 package pacman.entries.pacman;
+
 import dataRecording.DataTuple;
 import pacman.game.Constants;
 
-public class Tuple {
-    private Constants.MOVE moveClass;
+public class GameTuple {
     private DataTuple.DiscreteTag position;
     private boolean blinkyEdible;
     private boolean inkyEdible;
@@ -14,9 +14,8 @@ public class Tuple {
     private DataTuple.DiscreteTag pinkyDistance;
     private DataTuple.DiscreteTag sueDistance;
 
-    public Tuple(String[] values)
+    public GameTuple(String[] values)
     {
-        moveClass=Constants.MOVE.valueOf(values[0]);
         position=DataTuple.DiscreteTag.valueOf(values[1]);
         blinkyEdible=Boolean.parseBoolean(values[2]);
         inkyEdible=Boolean.parseBoolean(values[3]);
@@ -26,10 +25,6 @@ public class Tuple {
         inkyDistance=DataTuple.DiscreteTag.valueOf(values[7]);
         pinkyDistance=DataTuple.DiscreteTag.valueOf(values[8]);
         sueDistance=DataTuple.DiscreteTag.valueOf(values[9]);
-    }
-
-    public Constants.MOVE getMoveClass() {
-        return moveClass;
     }
 
     public DataTuple.DiscreteTag getPosition() {

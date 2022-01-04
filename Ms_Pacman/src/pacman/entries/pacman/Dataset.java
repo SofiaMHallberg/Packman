@@ -1,12 +1,18 @@
 package pacman.entries.pacman;
 
-import java.io.*;
+import dataRecording.DataTuple;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 
 public class Dataset {
+
     private BufferedReader reader;
-    LinkedList<Tuple> trainingDataSet;
-    LinkedList<Tuple> testDataSet;
+    LinkedList<DataTuple> trainingDataSet;
+    LinkedList<DataTuple> testDataSet;
 
     public Dataset() {
         try {
@@ -18,11 +24,11 @@ public class Dataset {
 
     public void readData() throws IOException {
         reader=new BufferedReader(new InputStreamReader(new FileInputStream("myData/trainingData.txt")));
-        LinkedList<Tuple> dataSet=new LinkedList<>();
+        LinkedList<DataTuple> dataSet=new LinkedList<>();
 
         while (reader.ready()) {
-            Tuple tuple=new Tuple(reader.readLine().split(";"));
-            dataSet.add(tuple);
+            DataTuple dataTuple=new DataTuple(reader.readLine());
+            dataSet.add(dataTuple);
         }
 
         int nbrOfTuples=dataSet.size();
@@ -41,11 +47,10 @@ public class Dataset {
         }
     }
 
-    public LinkedList<Tuple> getTrainingDataSet() {
+    public LinkedList<DataTuple> getTrainingDataSet() {
         return trainingDataSet;
     }
-
-    public LinkedList<Tuple> getTestDataSet() {
+    public LinkedList<DataTuple> getTestDataSet() {
         return testDataSet;
     }
 }

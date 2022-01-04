@@ -1,9 +1,8 @@
 package pacman.entries.pacman;
 
-import java.util.Collections;
 import java.util.LinkedList;
 
-public class AttributeList {
+public class AttributeList implements Cloneable {
     LinkedList<AttributeObject> list;
 
     public AttributeList() {
@@ -23,11 +22,6 @@ public class AttributeList {
         return list;
     }
 
-    public LinkedList<AttributeObject> getSortedAttributeList() {
-        Collections.sort(list);
-        return list;
-    }
-
     public void removeAttribute(Attribute attribute) {
         for(int i=0; i<list.size(); i++) {
             if(list.get(i).getAttribute()==attribute) {
@@ -35,6 +29,11 @@ public class AttributeList {
                 break;
             }
         }
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public int getSize() {

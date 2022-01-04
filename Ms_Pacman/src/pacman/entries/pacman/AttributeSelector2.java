@@ -1,21 +1,24 @@
 package pacman.entries.pacman;
 
 import dataRecording.DataTuple;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+
 import static pacman.entries.pacman.Attribute.*;
+import static pacman.entries.pacman.Attribute.INKY_EDIBLE;
 
-public class AttributeSelector {
-
+public class AttributeSelector2 {
     private LinkedList<DataTuple> dataSet;
-    private AttributeList attributeList;
+    private ArrayList<AttributeObject>  attributeList;
     private double nbrOfTuples;
     private double nbrOfUp;
     private double nbrOfDown;
     private double nbrOfRight;
     private double nbrOfLeft;
 
-    public AttributeSelector(LinkedList<DataTuple> dataSet, AttributeList attributeList) {
+    public AttributeSelector2(LinkedList<DataTuple> dataSet, ArrayList<AttributeObject> attributeList) {
         this.dataSet=dataSet;
         this.attributeList=attributeList;
     }
@@ -47,7 +50,7 @@ public class AttributeSelector {
         double averageInfo=getAverageInfo(nbrOfTuples, nbrOfLeft, nbrOfRight, nbrOfUp, nbrOfDown);
         //System.out.println("average info: "+averageInfo);
 
-        LinkedList<AttributeObject> list=attributeList.getList();
+        ArrayList<AttributeObject> list=attributeList;
         for (AttributeObject attributeObject:list) {
             switch(attributeObject.getAttribute()) {
                 case PACMAN_POSITION:
@@ -92,13 +95,13 @@ public class AttributeSelector {
         }
 
         Collections.sort(list);
-        System.out.println("selected attribute: "+String.valueOf(list.getFirst().getAttribute()));
-        return list.removeFirst().getAttribute();
+        System.out.println("selected attribute: "+String.valueOf(list.get(0).getAttribute()));
+        return list.remove(0).getAttribute();
     }
 
     private void setGain(double gain, Attribute attribute) {
-        LinkedList<AttributeObject> list=attributeList.getList();
-        for(int i=0; i<attributeList.getSize(); i++) {
+        ArrayList<AttributeObject> list=attributeList;
+        for(int i=0; i<list.size(); i++) {
             if(list.get(i).getAttribute()==attribute) {
                 list.get(i).setGain(gain);
                 break;

@@ -5,69 +5,88 @@ import dataRecording.DataTuple;
 import java.util.LinkedList;
 
 public class SubsetCreator {
-    private LinkedList<Tuple> subSet;
-    private LinkedList<LinkedList<Tuple>> subSetList;
 
-    public SubsetCreator(LinkedList<Tuple> dataSet, Attribute attribute) {
-        subSetList = new LinkedList<>();
+    private LinkedList<DataTuple> subSetVeryLow;
+    private LinkedList<DataTuple> subSetLow;
+    private LinkedList<DataTuple> subSetMedium;
+    private LinkedList<DataTuple> subSetHigh;
+    private LinkedList<DataTuple> subSetVeryHigh;
+    private LinkedList<DataTuple> subSetTrue;
+    private LinkedList<DataTuple> subSetFalse;
+
+    public SubsetCreator(LinkedList<DataTuple> dataSet, Attribute attribute) {
         if (attribute == Attribute.BLINKY_EDIBLE || attribute == Attribute.INKY_EDIBLE
                 ||attribute == Attribute.PINKY_EDIBLE ||attribute == Attribute.SUE_EDIBLE) {
             createBooleanTagSubSet(dataSet, attribute);
         }
-        else createDiscreteTagSubSet(dataSet, attribute);
+        else
+            createDiscreteTagSubSet(dataSet, attribute);
     }
 
-    private void createDiscreteTagSubSet(LinkedList<Tuple> dataSet, Attribute attribute) {
-        LinkedList<Tuple> subSetVeryLow = new LinkedList<>();
-        LinkedList<Tuple> subSetLow = new LinkedList<>();
-        LinkedList<Tuple> subSetMedium = new LinkedList<>();
-        LinkedList<Tuple> subSetHigh = new LinkedList<>();
-        LinkedList<Tuple> subSetVeryHigh = new LinkedList<>(); //förlåt...
+    public LinkedList<DataTuple> getSubSet(String value) {
+        switch (value) {
+            case "VERY_LOW":
+                return subSetVeryLow;
+            case "LOW":
+                return subSetLow;
+            case "MEDIUM":
+                return subSetMedium;
+            case "HIGH":
+                return subSetHigh;
+            case "VERY_HIGH":
+                return subSetVeryHigh;
+            case "true":
+                return subSetTrue;
+            case "false":
+                return subSetFalse;
+           default:
+                return null;
+        }
+    }
+
+    private void createDiscreteTagSubSet(LinkedList<DataTuple> dataSet, Attribute attribute) {
+        subSetVeryLow = new LinkedList<>();
+        subSetLow = new LinkedList<>();
+        subSetMedium = new LinkedList<>();
+        subSetHigh = new LinkedList<>();
+        subSetVeryHigh = new LinkedList<>();
 
         for (int i = 0; i < dataSet.size(); i++) {
-            Tuple tup = dataSet.get(i);
-            switch (tup.getDiscreteValue(attribute)) {
+            DataTuple tuple = dataSet.get(i);
+            switch (tuple.getDiscreteValue(attribute)) {
                 case VERY_LOW:
-                    subSetVeryLow.add(tup);
+                    subSetVeryLow.add(tuple);
                     break;
                 case LOW:
-                    subSetLow.add(tup);
+                    subSetLow.add(tuple);
                     break;
                 case MEDIUM:
-                    subSetMedium.add(tup);
+                    subSetMedium.add(tuple);
                     break;
                 case HIGH:
-                    subSetHigh.add(tup);
+                    subSetHigh.add(tuple);
                     break;
                 case VERY_HIGH:
-                    subSetVeryHigh.add(tup);
+                    subSetVeryHigh.add(tuple);
                     break;
                 case NONE:
-                    System.out.println("HÄR VAR DET KNAS. SubsetCreator createDiscreteTagSubset.");
+                    subSetMedium.add(tuple);
 
             }
         }
-        subSetList.add(subSetVeryLow);
-        subSetList.add(subSetLow);
-        subSetList.add(subSetMedium);
-        subSetList.add(subSetHigh);
-        subSetList.add(subSetVeryHigh);
     }
 
-    private void createBooleanTagSubSet(LinkedList<Tuple> dataSet, Attribute attribute) {
-        LinkedList<Tuple> subSetTrue = new LinkedList<>();
-        LinkedList<Tuple> subSetFalse = new LinkedList<>();
+    private void createBooleanTagSubSet(LinkedList<DataTuple> dataSet, Attribute attribute) {
+        subSetTrue = new LinkedList<>();
+        subSetFalse = new LinkedList<>();
 
         for (int i = 0; i < dataSet.size(); i++) {
-            if (dataSet.get(i).getBooleanValue(attribute)) {
-                subSetTrue.add(dataSet.get(i));
-            } else subSetFalse.add(dataSet.get(i));
-        }
-        subSetList.add(subSetFalse);
-        subSetList.add(subSetTrue);
-    }
+            DataTuple tuple=dataSet.get(i);
+            if (tuple.getBooleanValue(attribute))
+                subSetTrue.add(tuple);
 
-    public LinkedList<LinkedList<Tuple>> getSubSetList() {
-        return subSetList;
+            else
+                subSetFalse.add(tuple);
+        }
     }
 }

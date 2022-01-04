@@ -1,29 +1,142 @@
 package pacman.entries.pacman;
 
+import dataRecording.DataTuple;
 import pacman.controllers.Controller;
-import pacman.game.Constants.MOVE;
+import pacman.game.Constants;
 import pacman.game.Game;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
-/*
- * This is the class you need to modify for your entry. In particular, you need to
- * fill in the getAction() method. Any additional classes you write should either
- * be placed in this package or sub-packages (e.g., game.entries.pacman.mypackage).
- */
-public class MyPacMan extends Controller<MOVE>
+public class MyPacMan extends Controller<Constants.MOVE>
 {
-	public MyPacMan() {
-		DecisionTreeCreator dtCreator = new DecisionTreeCreator();
-	}
-	private MOVE myMove=MOVE.NEUTRAL;
-	
-	public MOVE getMove(Game game, long timeDue) 
-	{
-		//Place your game logic here to play the game as Ms Pac-Man
-		
-		return myMove;
-	}
+    private DecisionTreeCreator dtCreator;
+    private Node root;
+    private LinkedList<DataTuple> trainingDataSet;
+    private LinkedList<DataTuple> testDataSet;
 
-	public static void main(String[] args) {
-		new MyPacMan();
-	}
+    public MyPacMan() throws CloneNotSupportedException {
+        dtCreator = new DecisionTreeCreator();
+        trainingDataSet= dtCreator.getTrainingDataSet();
+        testDataSet= dtCreator.getTestDataSet();
+        buildTree();
+        dtCreator.printNodeList();
+    }
+
+    private void printTree(Node node) {
+        System.out.println("Next node:");
+        if(node.isLeafNode())
+            System.out.println("Node class: "+String.valueOf(node.getMove()));
+        else {
+            System.out.println("Node attribute: " + String.valueOf(node.getAttribute()));
+            System.out.println("Nbr of children: "+node.getNbrOfChildren());
+            HashMap<String, Node> children=node.getChildNodes();
+            Map.Entry<String, Node>[] nodes = children.entrySet().toArray(new Map.Entry[0]);
+            for (Map.Entry<String, Node> N:nodes) {
+                System.out.println(String.valueOf(N.getKey()));
+
+            }
+
+            LinkedList<String> values=dtCreator.getValues(node.getAttribute());
+            for (String thisValue:values) {
+                System.out.println("Value "+String.valueOf(thisValue)+":");
+                printTree(node.getChildNodes().get(thisValue));
+            }
+        }
+    }
+
+    private void buildTree() throws CloneNotSupportedException {
+        ArrayList<AttributeObject> attributeList=createAttributeList();
+        root=dtCreator.buildTree(trainingDataSet, attributeList);
+    }
+
+    private ArrayList<AttributeObject> createAttributeList() {
+        ArrayList<AttributeObject> list=new ArrayList<>();
+        list.add(new AttributeObject(Attribute.PACMAN_POSITION));
+        list.add(new AttributeObject(Attribute.BLINKY_EDIBLE));
+        list.add(new AttributeObject(Attribute.INKY_EDIBLE));
+        list.add(new AttributeObject(Attribute.PINKY_EDIBLE));
+        list.add(new AttributeObject(Attribute.SUE_EDIBLE));
+        list.add(new AttributeObject(Attribute.BLINKY_DISTANCE));
+        list.add(new AttributeObject(Attribute.INKY_DISTANCE));
+        list.add(new AttributeObject(Attribute.PINKY_DISTANCE));
+        list.add(new AttributeObject(Attribute.SUE_DISTANCE));
+        return list;
+    }
+
+   // private Constants.MOVE myMove= Constants.MOVE.NEUTRAL;
+
+    public Constants.MOVE getMove(Game game, long timeDue)
+    {
+        DataTuple newTuple=new DataTuple(game,null);
+        Constants.MOVE myMove=traverseTree(root, newTuple);
+        return myMove;
+    }
+
+    private Constants.MOVE traverseTree(Node node, DataTuple tuple) {
+        Constants.MOVE nextMove=null;
+        System.out.println("testing if for node nbr "+node.getNodeNbr());
+        if(node.isLeaf()) {
+            nextMove=node.getMove();
+        }
+        else {
+            Attribute nodeAttribute=node.getAttribute();
+            String valueInTuple=getAttributeValue(nodeAttribute, tuple);
+            Node nextNode=node.getChild(valueInTuple); // blir tydligen null
+            nextMove=traverseTree(nextNode, tuple);
+        }
+        System.out.println("next move is "+String.valueOf(nextMove));
+        return nextMove;
+    }
+
+    private String getAttributeValue(Attribute attribute, DataTuple tuple) {
+        if(attribute==Attribute.BLINKY_EDIBLE || attribute==Attribute.INKY_EDIBLE
+           || attribute==Attribute.PINKY_EDIBLE || attribute==Attribute.SUE_EDIBLE) {
+            return String.valueOf(tuple.getBooleanValue(attribute));
+        }
+        else
+            return String.valueOf(tuple.getDiscreteValue(attribute));
+    }
+
+    public void validateTrainingSet() {
+        int nbrOfTrainingTuples=trainingDataSet.size();
+        double nbrOfTests=0;
+        double nbrOfMatches=0;
+        for(int i=0; i<nbrOfTrainingTuples; i++) {
+            nbrOfTests++;
+            Constants.MOVE decisionTreeMove=traverseTree(root, trainingDataSet.get(i));
+            Constants.MOVE dataSetMove=trainingDataSet.get(i).getMove();
+            if(decisionTreeMove==dataSetMove)
+                nbrOfMatches++;
+
+        }
+        double hitRate=nbrOfMatches/nbrOfTests;
+        DecimalFormat df=new DecimalFormat("###.##");
+        System.out.println("Training set data hitrate: "+df.format(hitRate*100)+"%");
+
+    }
+
+    public void validateTestSet() {
+        int nbrOfTestTuples=testDataSet.size();
+        double nbrOfTests=0;
+        double nbrOfMatches=0;
+        for(int i=0; i<nbrOfTestTuples; i++) {
+            nbrOfTests++;
+            Constants.MOVE decisionTreeMove=traverseTree(root, testDataSet.get(i));
+            Constants.MOVE dataSetMove=testDataSet.get(i).getMove();
+            if(decisionTreeMove==dataSetMove)
+                nbrOfMatches++;
+        }
+        double hitRate=nbrOfMatches/nbrOfTests;
+        DecimalFormat df=new DecimalFormat("###.##");
+        System.out.println("Test set data hitrate: "+df.format(hitRate*100)+"%");
+    }
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        MyPacMan pacMan=new MyPacMan();
+        pacMan.validateTrainingSet();
+        pacMan.validateTestSet();
+    }
 }
