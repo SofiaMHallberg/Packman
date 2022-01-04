@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Random;
 
+import dataRecording.DataCollectorController;
 import pacman.controllers.Controller;
 import pacman.controllers.HumanController;
+import pacman.controllers.KeyBoardInput;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.entries.pacman.MyPacMan;
 import pacman.game.Game;
@@ -74,7 +76,7 @@ public class Executor
 		 */
 		
 		//run game for data collection
-		//exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
+//		exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
 	}
 	
     /**

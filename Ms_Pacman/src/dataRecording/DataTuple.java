@@ -1,5 +1,6 @@
 package dataRecording;
 
+import org.w3c.dom.Attr;
 import pacman.entries.pacman.Attribute;
 import pacman.game.Constants;
 import pacman.game.Constants.DM;
@@ -49,6 +50,8 @@ public class DataTuple {
 	public int inkyDist = -1;
 	public int pinkyDist = -1;
 	public int sueDist = -1;
+
+
 
 	public MOVE blinkyDir;
 	public MOVE inkyDir;
@@ -211,6 +214,22 @@ public class DataTuple {
 		return this.isSueEdible;
 	}
 
+	public MOVE getBlinkyDir() {
+		return this.blinkyDir;
+	}
+
+	public MOVE getInkyDir() {
+		return inkyDir;
+	}
+
+	public MOVE getPinkyDir() {
+		return pinkyDir;
+	}
+
+	public MOVE getSueDir() {
+		return sueDir;
+	}
+
 
 	public DiscreteTag getDiscreteValue(Attribute attribute) {
 		switch (attribute) {
@@ -242,6 +261,21 @@ public class DataTuple {
 		}
 		System.out.println("Attribute is missing in DataTuple.getBooleanValue");
 		return true; //OBS! KONTROLLERA SÅ DETTA INTE SKER
+	}
+
+	public MOVE getGhostDir(Attribute attribute) {
+		switch (attribute) {
+			case BLINKY_DIR:
+				return blinkyDir;
+			case INKY_DIR:
+				return inkyDir;
+			case PINKY_DIR:
+				return pinkyDir;
+			case SUE_DIR:
+				return sueDir;
+		}
+		System.out.println("Attribute is missing in DataTuple.getGhostDir");
+		return null;
 	}
 
 	/**

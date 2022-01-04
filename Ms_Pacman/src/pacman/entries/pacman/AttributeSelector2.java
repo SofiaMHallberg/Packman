@@ -1,6 +1,8 @@
 package pacman.entries.pacman;
 
 import dataRecording.DataTuple;
+import pacman.game.Constants;
+import pacman.game.Constants.MOVE;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,11 +93,27 @@ public class AttributeSelector2 {
                     double infoInSueDistance=getDiscreteTagInfo(Attribute.SUE_DISTANCE);
                     double gainSueDist=averageInfo-infoInSueDistance;
                     setGain(gainSueDist, Attribute.SUE_DISTANCE);
+                case BLINKY_DIR:
+                    double infoInBlinkyDir=getGhostDirInfo(Attribute.BLINKY_DIR);
+                    double gainBlinkyDir=averageInfo-infoInBlinkyDir;
+                    setGain(gainBlinkyDir, Attribute.BLINKY_DIR);
+                case INKY_DIR:
+                    double infoInInkyDir=getGhostDirInfo(Attribute.INKY_DIR);
+                    double gainInkyDir=averageInfo-infoInInkyDir;
+                    setGain(gainInkyDir, Attribute.INKY_DIR);
+                case PINKY_DIR:
+                    double infoInPinkyDir=getGhostDirInfo(Attribute.PINKY_DIR);
+                    double gainPinkyDir=averageInfo-infoInPinkyDir;
+                    setGain(gainPinkyDir, Attribute.PINKY_DIR);
+                case SUE_DIR:
+                    double infoInSueDir=getGhostDirInfo(Attribute.SUE_DIR);
+                    double gainSueDir=averageInfo-infoInSueDir;
+                    setGain(gainSueDir, Attribute.SUE_DIR);
             }
         }
 
         Collections.sort(list);
-        System.out.println("selected attribute: "+String.valueOf(list.get(0).getAttribute()));
+//        System.out.println("selected attribute: "+String.valueOf(list.get(0).getAttribute()));
         return list.remove(0).getAttribute();
     }
 
@@ -148,7 +166,74 @@ public class AttributeSelector2 {
         return infoInTag;
     }
 
+    private double getGhostDirInfo(Attribute attribute) {
+        double nbrOfUp = 0;
+        double nbrOfDown = 0;
+        double nbrOfLeft = 0;
+        double nbrOfRight = 0;
+        double nbrOfNeutral = 0;
 
+        switch (attribute) {
+            case BLINKY_DIR:
+                for(int i=0; i<nbrOfTuples; i++) {
+                    if (dataSet.get(i).getBlinkyDir() == MOVE.UP)
+                        nbrOfUp++;
+                    if (dataSet.get(i).getBlinkyDir() == MOVE.DOWN)
+                        nbrOfDown++;
+                    if (dataSet.get(i).getBlinkyDir() == MOVE.LEFT)
+                        nbrOfLeft++;
+                    if (dataSet.get(i).getBlinkyDir() == MOVE.RIGHT)
+                        nbrOfRight++;
+                    if (dataSet.get(i).getBlinkyDir() == MOVE.NEUTRAL)
+                        nbrOfNeutral++;
+                }
+                break;
+            case INKY_DIR:
+                for(int i=0; i<nbrOfTuples; i++) {
+                    if (dataSet.get(i).getInkyDir() == MOVE.UP)
+                        nbrOfUp++;
+                    if (dataSet.get(i).getInkyDir() == MOVE.DOWN)
+                        nbrOfDown++;
+                    if (dataSet.get(i).getInkyDir() == MOVE.LEFT)
+                        nbrOfLeft++;
+                    if (dataSet.get(i).getInkyDir() == MOVE.RIGHT)
+                        nbrOfRight++;
+                    if (dataSet.get(i).getInkyDir() == MOVE.NEUTRAL)
+                        nbrOfNeutral++;
+                }
+            case PINKY_DIR:
+                for(int i=0; i<nbrOfTuples; i++) {
+                    if (dataSet.get(i).getPinkyDir() == MOVE.UP)
+                        nbrOfUp++;
+                    if (dataSet.get(i).getPinkyDir() == MOVE.DOWN)
+                        nbrOfDown++;
+                    if (dataSet.get(i).getPinkyDir() == MOVE.LEFT)
+                        nbrOfLeft++;
+                    if (dataSet.get(i).getPinkyDir() == MOVE.RIGHT)
+                        nbrOfRight++;
+                    if (dataSet.get(i).getPinkyDir() == MOVE.NEUTRAL)
+                        nbrOfNeutral++;
+                }
+            case SUE_DIR:
+                for(int i=0; i<nbrOfTuples; i++) {
+                    if (dataSet.get(i).getSueDir() == MOVE.UP)
+                        nbrOfUp++;
+                    if (dataSet.get(i).getSueDir() == MOVE.DOWN)
+                        nbrOfDown++;
+                    if (dataSet.get(i).getSueDir() == MOVE.LEFT)
+                        nbrOfLeft++;
+                    if (dataSet.get(i).getSueDir() == MOVE.RIGHT)
+                        nbrOfRight++;
+                    if (dataSet.get(i).getSueDir() == MOVE.NEUTRAL)
+                        nbrOfNeutral++;
+                }
+        }
+        return nbrOfUp/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfUp))+
+                nbrOfDown/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfDown))+
+                nbrOfLeft/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfLeft))+
+                nbrOfRight/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfRight))+
+                nbrOfNeutral/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfNeutral));
+    }
 
     private double getDiscreteTagInfo(Attribute attribute) {
         double nbrOfVeryLow=0;
@@ -156,6 +241,7 @@ public class AttributeSelector2 {
         double nbrOfMedium=0;
         double nbrOfHigh=0;
         double nbrOfVeryHigh=0;
+        double nbrOfNone = 0;
 
         switch (attribute) {
             case PACMAN_POSITION:
@@ -170,6 +256,8 @@ public class AttributeSelector2 {
                         nbrOfHigh++;
                     if(dataSet.get(i).getPosition()==DataTuple.DiscreteTag.VERY_HIGH)
                         nbrOfVeryHigh++;
+                    if (dataSet.get(i).getPosition()==DataTuple.DiscreteTag.NONE)
+                        nbrOfNone++;
                 }
                 break;
             case BLINKY_DISTANCE:
@@ -184,6 +272,8 @@ public class AttributeSelector2 {
                         nbrOfHigh++;
                     if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.VERY_HIGH)
                         nbrOfVeryHigh++;
+                    if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.NONE)
+                        nbrOfNone++;
                 }
                 break;
             case INKY_DISTANCE:
@@ -198,6 +288,8 @@ public class AttributeSelector2 {
                         nbrOfHigh++;
                     if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.VERY_HIGH)
                         nbrOfVeryHigh++;
+                    if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.NONE)
+                        nbrOfNone++;
                 }
                 break;
             case PINKY_DISTANCE:
@@ -212,6 +304,8 @@ public class AttributeSelector2 {
                         nbrOfHigh++;
                     if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.VERY_HIGH)
                         nbrOfVeryHigh++;
+                    if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.NONE)
+                        nbrOfNone++;
                 }
                 break;
             case SUE_DISTANCE:
@@ -226,6 +320,8 @@ public class AttributeSelector2 {
                         nbrOfHigh++;
                     if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.VERY_HIGH)
                         nbrOfVeryHigh++;
+                    if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.NONE)
+                        nbrOfNone++;
                 }
                 break;
         }
@@ -234,7 +330,8 @@ public class AttributeSelector2 {
                 nbrOfLow/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfLow))+
                 nbrOfMedium/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfMedium))+
                 nbrOfHigh/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfHigh))+
-                nbrOfVeryHigh/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfVeryHigh));
+                nbrOfVeryHigh/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfVeryHigh))+
+                nbrOfNone/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfNone));
         return infoInTag;
     }
 

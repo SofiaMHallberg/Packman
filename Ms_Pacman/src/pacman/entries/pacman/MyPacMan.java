@@ -22,7 +22,7 @@ public class MyPacMan extends Controller<Constants.MOVE>
         trainingDataSet= dtCreator.getTrainingDataSet();
         testDataSet= dtCreator.getTestDataSet();
         buildTree();
-        dtCreator.printNodeList();
+//        dtCreator.printNodeList();
     }
 
     private void printTree(Node node) {
@@ -63,6 +63,10 @@ public class MyPacMan extends Controller<Constants.MOVE>
         list.add(new AttributeObject(Attribute.INKY_DISTANCE));
         list.add(new AttributeObject(Attribute.PINKY_DISTANCE));
         list.add(new AttributeObject(Attribute.SUE_DISTANCE));
+        list.add(new AttributeObject(Attribute.BLINKY_DIR));
+        list.add(new AttributeObject(Attribute.INKY_DIR));
+        list.add(new AttributeObject(Attribute.PINKY_DIR));
+        list.add(new AttributeObject(Attribute.SUE_DIR));
         return list;
     }
 
@@ -77,7 +81,7 @@ public class MyPacMan extends Controller<Constants.MOVE>
 
     private Constants.MOVE traverseTree(Node node, DataTuple tuple) {
         Constants.MOVE nextMove=null;
-        System.out.println("testing if for node nbr "+node.getNodeNbr());
+//        System.out.println("testing if for node nbr "+node.getNodeNbr());
         if(node.isLeaf()) {
             nextMove=node.getMove();
         }
@@ -87,7 +91,7 @@ public class MyPacMan extends Controller<Constants.MOVE>
             Node nextNode=node.getChild(valueInTuple); // blir tydligen null
             nextMove=traverseTree(nextNode, tuple);
         }
-        System.out.println("next move is "+String.valueOf(nextMove));
+//        System.out.println("next move is "+String.valueOf(nextMove));
         return nextMove;
     }
 
@@ -95,6 +99,10 @@ public class MyPacMan extends Controller<Constants.MOVE>
         if(attribute==Attribute.BLINKY_EDIBLE || attribute==Attribute.INKY_EDIBLE
            || attribute==Attribute.PINKY_EDIBLE || attribute==Attribute.SUE_EDIBLE) {
             return String.valueOf(tuple.getBooleanValue(attribute));
+        }
+        else if(attribute==Attribute.BLINKY_DIR || attribute==Attribute.INKY_DIR
+                || attribute==Attribute.PINKY_DIR || attribute==Attribute.SUE_DIR) {
+            return String.valueOf(tuple.getGhostDir(attribute));
         }
         else
             return String.valueOf(tuple.getDiscreteValue(attribute));

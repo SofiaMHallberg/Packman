@@ -13,7 +13,11 @@ public enum Attribute {
     BLINKY_DISTANCE,
     INKY_DISTANCE,
     PINKY_DISTANCE,
-    SUE_DISTANCE;
+    SUE_DISTANCE,
+    BLINKY_DIR,
+    INKY_DIR,
+    PINKY_DIR,
+    SUE_DIR;
 
 
 }

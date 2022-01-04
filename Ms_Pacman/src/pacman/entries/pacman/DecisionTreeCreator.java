@@ -93,6 +93,7 @@ public class DecisionTreeCreator {
         nbrOfMoves.put(Constants.MOVE.RIGHT, 0);
         nbrOfMoves.put(Constants.MOVE.UP, 0);
         nbrOfMoves.put(Constants.MOVE.DOWN, 0);
+        nbrOfMoves.put(Constants.MOVE.NEUTRAL, 0);
 
         for (DataTuple tuple:dataSet) {
             nbrOfMoves.put(tuple.getMove(),nbrOfMoves.get(tuple.getMove())+1);
@@ -123,12 +124,21 @@ public class DecisionTreeCreator {
         discreteList.add("MEDIUM");
         discreteList.add("HIGH");
         discreteList.add("VERY_HIGH");
+        discreteList.add("NONE");
         LinkedList<String> booleanList=new LinkedList<>();
         booleanList.add("true");
         booleanList.add("false");
+        LinkedList<String> ghostDirList = new LinkedList<>();
+        ghostDirList.add("UP");
+        ghostDirList.add("DOWN");
+        ghostDirList.add("LEFT");
+        ghostDirList.add("RIGHT");
+        ghostDirList.add("NEUTRAL");
 
         if(attribute==BLINKY_EDIBLE || attribute==INKY_EDIBLE || attribute==PINKY_EDIBLE || attribute==SUE_EDIBLE)
             return booleanList;
+        else if (attribute==BLINKY_DIR || attribute==INKY_DIR || attribute==PINKY_DIR || attribute==SUE_DIR)
+            return ghostDirList;
         else
             return discreteList;
     }
