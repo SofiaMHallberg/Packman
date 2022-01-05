@@ -1,6 +1,5 @@
 package dataRecording;
 
-import org.w3c.dom.Attr;
 import pacman.entries.pacman.Attribute;
 import pacman.game.Constants;
 import pacman.game.Constants.DM;

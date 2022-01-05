@@ -1,21 +1,17 @@
 package pacman.entries.pacman;
 
 /**
- * A class for storing attributes and their gain.
+ * A class for storing attributes and corresponding gain.
  *
  * @author Sofia Hallberg, Oscar Kareld
  * 04/01-2022
  */
-public class AttributeObject implements Comparable<AttributeObject>{
+public class AttributeObject implements Comparable<AttributeObject> {
     private double gain;
-    private Attribute name;
+    private Attribute type;
 
-    public AttributeObject(Attribute name, double gain) {
-        this.name=name;
-        this.gain=gain;
-    }
-    public AttributeObject(Attribute name) {
-        this.name=name;
+    public AttributeObject(Attribute type) {
+        this.type=type;
     }
 
     public double getGain() {
@@ -24,10 +20,11 @@ public class AttributeObject implements Comparable<AttributeObject>{
 
     public void setGain(double gain) {
         this.gain=gain;
+        //System.out.println("setGain "+gain+" to "+String.valueOf(type));
     }
 
     public Attribute getAttribute() {
-        return name;
+        return type;
     }
 
     @Override

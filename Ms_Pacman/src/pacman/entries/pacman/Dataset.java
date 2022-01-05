@@ -38,8 +38,6 @@ public class Dataset {
             dataSet.add(dataTuple);
         }
 
-        int nbrOfTuples=dataSet.size();
-
         boolean hasTuplesLeft=true;
         trainingDataSet=new LinkedList<>();
         testDataSet=new LinkedList<>();
