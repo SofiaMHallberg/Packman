@@ -1,7 +1,7 @@
 package pacman.entries.pacman;
 
 /**
- * A class for storing attributes and gain.
+ * A class for storing attributes and their gain.
  *
  * @author Sofia Hallberg, Oscar Kareld
  * 04/01-2022

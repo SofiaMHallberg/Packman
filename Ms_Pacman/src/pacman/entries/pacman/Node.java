@@ -4,6 +4,7 @@ import pacman.game.Constants;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * This class stores all information necessary for the nodes in the decision tree.
@@ -76,6 +77,27 @@ public class Node {
 
     public int getNbrOfChildren() {
         return childNodes.size();
+    }
+
+    public void startPrinting() {
+        print("");
+    }
+    private void print(String branch) {
+        if (this.isLeaf) {
+            System.out.print(branch);
+            System.out.println("---(LEAF) RETURN: " + getMove());
+        }
+        Map.Entry<String, Node>[] childrenNodes = childNodes.entrySet().toArray(new Map.Entry[0]);
+        for (int i = 0; i < childrenNodes.length; i++) {
+            System.out.print(branch);
+            if (i == childrenNodes.length - 1 && getMove() != null) {
+                System.out.println("---" + getMove() + " = " + childrenNodes[i].getKey() + ":");
+                childrenNodes[i].getValue().print(branch + "    ");
+            } else {
+                System.out.println("---" + getAttribute() + " = " + childrenNodes[i].getKey() + ":");
+                childrenNodes[i].getValue().print(branch + "|" +"   ");
+            }
+        }
     }
 
 }

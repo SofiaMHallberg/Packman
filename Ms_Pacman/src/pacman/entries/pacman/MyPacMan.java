@@ -31,6 +31,7 @@ public class MyPacMan extends Controller<Constants.MOVE>
         testDataSet= dtCreator.getTestDataSet();
         buildTree();
 //        dtCreator.printNodeList();
+//        printTree(root);
     }
 
     /**
@@ -62,6 +63,7 @@ public class MyPacMan extends Controller<Constants.MOVE>
     private void buildTree() throws CloneNotSupportedException {
         ArrayList<AttributeObject> attributeList=createAttributeList();
         root=dtCreator.buildTree(trainingDataSet, attributeList);
+        root.startPrinting();
     }
 
     private ArrayList<AttributeObject> createAttributeList() {
