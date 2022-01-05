@@ -30,7 +30,7 @@ public class Dataset {
     }
 
     public void readData() throws IOException {
-        reader=new BufferedReader(new InputStreamReader(new FileInputStream("myData/trainingData.txt")));
+        reader=new BufferedReader(new InputStreamReader(new FileInputStream("myData/trainingData2.txt")));
         LinkedList<DataTuple> dataSet=new LinkedList<>();
 
         while (reader.ready()) {

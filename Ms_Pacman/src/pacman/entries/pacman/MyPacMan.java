@@ -63,7 +63,7 @@ public class MyPacMan extends Controller<Constants.MOVE>
     private void buildTree() throws CloneNotSupportedException {
         ArrayList<AttributeObject> attributeList=createAttributeList();
         root=dtCreator.buildTree(trainingDataSet, attributeList);
-        root.startPrinting();
+//        root.startPrinting();
     }
 
     private ArrayList<AttributeObject> createAttributeList() {

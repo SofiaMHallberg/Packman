@@ -76,7 +76,6 @@ public class DecisionTreeCreator {
         AttributeSelector selector =
                 new AttributeSelector(dataSet, attributeList); //Call the attribute selection method on D and the attribute list,
         Attribute thisAttribute = selector.selectAttribute();   //in order to choose the current attribute A
-        System.out.println("Selected attribute: "+String.valueOf(thisAttribute));
         node.setAttribute(thisAttribute);                       //Label N as A
         attributeList.remove(thisAttribute);                    //Remove A from the attribute list.
         LinkedList<String> values=getValues(thisAttribute);

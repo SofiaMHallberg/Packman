@@ -14,6 +14,8 @@ import dataRecording.DataCollectorController;
 import pacman.controllers.Controller;
 import pacman.controllers.HumanController;
 import pacman.controllers.KeyBoardInput;
+import pacman.controllers.examples.AggressiveGhosts;
+import pacman.controllers.examples.NearestPillPacMan;
 import pacman.controllers.examples.StarterGhosts;
 import pacman.entries.pacman.MyPacMan;
 import pacman.game.Game;
@@ -55,7 +57,10 @@ public class Executor
 		//run the game in asynchronous mode.
 		boolean visual=true;
 //		exec.runGameTimed(new NearestPillPacMan(),new AggressiveGhosts(),visual);
-		exec.runGameTimed(new MyPacMan(),new StarterGhosts(),visual);
+		MyPacMan pac = new MyPacMan();
+		pac.validateTrainingSet();
+		pac.validateTestSet();
+		exec.runGameTimed(pac,new StarterGhosts(),visual);
 //		exec.runGameTimed(new HumanController(new KeyBoardInput()),new StarterGhosts(),visual);
 		//*/
 		
