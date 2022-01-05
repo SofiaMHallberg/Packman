@@ -1,7 +1,6 @@
 package pacman.entries.pacman;
 
 import dataRecording.DataTuple;
-import pacman.game.Constants;
 import pacman.game.Constants.MOVE;
 
 import java.util.ArrayList;
@@ -9,10 +8,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 import static pacman.entries.pacman.Attribute.*;
-import static pacman.entries.pacman.Attribute.INKY_EDIBLE;
 
 /**
- * The class responsible for selecting attributs and calculating the gain of each of the attributes accoring to the dataset provided
+ * The class responsible for selecting attributes and calculating the gain of each of the attributes according to the dataset provided
  *
  * @author Sofia Hallberg, Oscar Kareld
  * 04/01-2022
@@ -29,9 +27,11 @@ public class AttributeSelector {
     public AttributeSelector(LinkedList<DataTuple> dataSet, ArrayList<AttributeObject> attributeList) {
         this.dataSet=dataSet;
         this.attributeList=attributeList;
+        //System.out.println("A new Attribute selector is created for a list with "+attributeList.size()+" elements");
     }
 
     public Attribute selectAttribute() {
+        //System.out.println("selectAttribute() is called");
         nbrOfTuples=dataSet.size();
         nbrOfUp=0;
         nbrOfDown=0;
@@ -39,7 +39,7 @@ public class AttributeSelector {
         nbrOfLeft=0;
 
         for (DataTuple tuple:dataSet) {
-            switch (tuple.DirectionChosen) {
+            switch (tuple.getMove()) {
                 case LEFT:
                     nbrOfLeft++;
                     break;
@@ -55,75 +55,93 @@ public class AttributeSelector {
             }
         }
 
-        double averageInfo=getAverageInfo(nbrOfTuples, nbrOfLeft, nbrOfRight, nbrOfUp, nbrOfDown);
+//        System.out.println("nbrOfTuples: "+nbrOfTuples);
+//        System.out.println("nbrOfUp: "+nbrOfUp);
+//        System.out.println("nbrOfDown: "+nbrOfDown);
+//        System.out.println("nbrOfRight: "+nbrOfRight);
+//        System.out.println("nbrOfLeft: "+nbrOfLeft);
 
-        ArrayList<AttributeObject> list=attributeList;
-        for (AttributeObject attributeObject:list) {
+        double averageInfo=getAverageInfo();
+        //System.out.println("averageInfo: "+averageInfo);
+
+        for (AttributeObject attributeObject:attributeList) {
             switch(attributeObject.getAttribute()) {
                 case PACMAN_POSITION:
                     double infoInPosition=getDiscreteTagInfo(PACMAN_POSITION);
                     double gainPosition=averageInfo-infoInPosition;
                     setGain(gainPosition, PACMAN_POSITION);
+                    break;
                 case BLINKY_EDIBLE:
                     double infoInBlinkyEdible=getBooleanTagInfo(BLINKY_EDIBLE);
                     double gainBlinkyEdible=averageInfo-infoInBlinkyEdible;
                     setGain(gainBlinkyEdible, BLINKY_EDIBLE);
+                    break;
                 case INKY_EDIBLE:
                     double infoInInkyEdible=getBooleanTagInfo(INKY_EDIBLE);
                     double gainInkyEdible=averageInfo-infoInInkyEdible;
                     setGain(gainInkyEdible, INKY_EDIBLE);
+                    break;
                 case PINKY_EDIBLE:
                     double infoInPinkyEdible=getBooleanTagInfo(Attribute.PINKY_EDIBLE);
                     double gainPinkyEdible=averageInfo-infoInPinkyEdible;
                     setGain(gainPinkyEdible, Attribute.PINKY_EDIBLE);
+                    break;
                 case SUE_EDIBLE:
                     double infoInSueEdible=getBooleanTagInfo(Attribute.SUE_EDIBLE);
                     double gainSueEdible=averageInfo-infoInSueEdible;
                     setGain(gainSueEdible, Attribute.SUE_EDIBLE);
+                    break;
                 case BLINKY_DISTANCE:
                     double infoInBlinkyDistance=getDiscreteTagInfo(Attribute.BLINKY_DISTANCE);
                     double gainBlinkyDist=averageInfo-infoInBlinkyDistance;
                     setGain(gainBlinkyDist, Attribute.BLINKY_DISTANCE);
+                    break;
                 case INKY_DISTANCE:
                     double infoInInkyDistance=getDiscreteTagInfo(Attribute.INKY_DISTANCE);
                     double gainInkyDist=averageInfo-infoInInkyDistance;
                     setGain(gainInkyDist, Attribute.INKY_DISTANCE);
+                    break;
                 case PINKY_DISTANCE:
                     double infoInPinkyDistance=getDiscreteTagInfo(Attribute.PINKY_DISTANCE);
                     double gainPinkyDist=averageInfo-infoInPinkyDistance;
                     setGain(gainPinkyDist, Attribute.PINKY_DISTANCE);
+                    break;
                 case SUE_DISTANCE:
                     double infoInSueDistance=getDiscreteTagInfo(Attribute.SUE_DISTANCE);
                     double gainSueDist=averageInfo-infoInSueDistance;
                     setGain(gainSueDist, Attribute.SUE_DISTANCE);
+                    break;
                 case BLINKY_DIR:
                     double infoInBlinkyDir=getGhostDirInfo(Attribute.BLINKY_DIR);
                     double gainBlinkyDir=averageInfo-infoInBlinkyDir;
                     setGain(gainBlinkyDir, Attribute.BLINKY_DIR);
+                    break;
                 case INKY_DIR:
                     double infoInInkyDir=getGhostDirInfo(Attribute.INKY_DIR);
                     double gainInkyDir=averageInfo-infoInInkyDir;
                     setGain(gainInkyDir, Attribute.INKY_DIR);
+                    break;
                 case PINKY_DIR:
                     double infoInPinkyDir=getGhostDirInfo(Attribute.PINKY_DIR);
                     double gainPinkyDir=averageInfo-infoInPinkyDir;
                     setGain(gainPinkyDir, Attribute.PINKY_DIR);
+                    break;
                 case SUE_DIR:
                     double infoInSueDir=getGhostDirInfo(Attribute.SUE_DIR);
                     double gainSueDir=averageInfo-infoInSueDir;
                     setGain(gainSueDir, Attribute.SUE_DIR);
+                    break;
             }
         }
 
-        Collections.sort(list);
-        return list.remove(0).getAttribute();
+        Collections.sort(attributeList);
+        return attributeList.remove(0).getAttribute();
     }
 
     private void setGain(double gain, Attribute attribute) {
-        ArrayList<AttributeObject> list=attributeList;
-        for(int i=0; i<list.size(); i++) {
-            if(list.get(i).getAttribute()==attribute) {
-                list.get(i).setGain(gain);
+        for (AttributeObject attributeObject:attributeList) {
+            if (attributeObject.getAttribute() == attribute) {
+                attributeObject.setGain(gain);
                 break;
             }
         }
@@ -135,106 +153,107 @@ public class AttributeSelector {
 
         switch (attribute) {
             case BLINKY_EDIBLE:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if(dataSet.get(i).getBlinkyEdible())
+                for (DataTuple tuple:dataSet) {
+                    if(tuple.getBlinkyEdible())
                         nbrOfTrue++;
-                    nbrOfFalse++;
+                    else
+                        nbrOfFalse++;
                 }
                 break;
             case INKY_EDIBLE:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if(dataSet.get(i).getInkyEdible())
+                for (DataTuple tuple:dataSet) {
+                    if(tuple.getInkyEdible())
                         nbrOfTrue++;
-                    nbrOfFalse++;
+                    else
+                        nbrOfFalse++;
                 }
                 break;
             case PINKY_EDIBLE:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if(dataSet.get(i).getPinkyEdible())
+                for (DataTuple tuple:dataSet) {
+                    if(tuple.getPinkyEdible())
                         nbrOfTrue++;
-                    nbrOfFalse++;
+                    else
+                        nbrOfFalse++;
                 }
                 break;
             case SUE_EDIBLE:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if(dataSet.get(i).getSueEdible())
+                for (DataTuple tuple:dataSet) {
+                    if(tuple.getSueEdible())
                         nbrOfTrue++;
-                    nbrOfFalse++;
+                    else
+                        nbrOfFalse++;
                 }
                 break;
         }
         double infoInTag=nbrOfTrue/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfTrue))+
-                nbrOfFalse/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfFalse));
+                         nbrOfFalse/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfFalse));
+
         return infoInTag;
     }
 
     private double getGhostDirInfo(Attribute attribute) {
-        double nbrOfUp = 0;
-        double nbrOfDown = 0;
-        double nbrOfLeft = 0;
-        double nbrOfRight = 0;
-        double nbrOfNeutral = 0;
+        double nbrOfGhostUp = 0;
+        double nbrOfGhostDown = 0;
+        double nbrOfGhostLeft = 0;
+        double nbrOfGhostRight = 0;
 
         switch (attribute) {
             case BLINKY_DIR:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if (dataSet.get(i).getBlinkyDir() == MOVE.UP)
-                        nbrOfUp++;
-                    if (dataSet.get(i).getBlinkyDir() == MOVE.DOWN)
-                        nbrOfDown++;
-                    if (dataSet.get(i).getBlinkyDir() == MOVE.LEFT)
-                        nbrOfLeft++;
-                    if (dataSet.get(i).getBlinkyDir() == MOVE.RIGHT)
-                        nbrOfRight++;
-                    if (dataSet.get(i).getBlinkyDir() == MOVE.NEUTRAL)
-                        nbrOfNeutral++;
+                for (DataTuple tuple:dataSet) {
+                    if (tuple.getBlinkyDir() == MOVE.UP)
+                        nbrOfGhostUp++;
+                    else if (tuple.getBlinkyDir() == MOVE.DOWN)
+                        nbrOfGhostDown++;
+                    else if (tuple.getBlinkyDir() == MOVE.LEFT)
+                        nbrOfGhostLeft++;
+                    else
+                        nbrOfGhostRight++;
                 }
                 break;
             case INKY_DIR:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if (dataSet.get(i).getInkyDir() == MOVE.UP)
-                        nbrOfUp++;
-                    if (dataSet.get(i).getInkyDir() == MOVE.DOWN)
-                        nbrOfDown++;
-                    if (dataSet.get(i).getInkyDir() == MOVE.LEFT)
-                        nbrOfLeft++;
-                    if (dataSet.get(i).getInkyDir() == MOVE.RIGHT)
-                        nbrOfRight++;
-                    if (dataSet.get(i).getInkyDir() == MOVE.NEUTRAL)
-                        nbrOfNeutral++;
+                for (DataTuple tuple:dataSet) {
+                    if (tuple.getInkyDir() == MOVE.UP)
+                        nbrOfGhostUp++;
+                    else if (tuple.getInkyDir() == MOVE.DOWN)
+                        nbrOfGhostDown++;
+                    else if (tuple.getInkyDir() == MOVE.LEFT)
+                        nbrOfGhostLeft++;
+                    else
+                        nbrOfGhostRight++;
                 }
+                break;
             case PINKY_DIR:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if (dataSet.get(i).getPinkyDir() == MOVE.UP)
-                        nbrOfUp++;
-                    if (dataSet.get(i).getPinkyDir() == MOVE.DOWN)
-                        nbrOfDown++;
-                    if (dataSet.get(i).getPinkyDir() == MOVE.LEFT)
-                        nbrOfLeft++;
-                    if (dataSet.get(i).getPinkyDir() == MOVE.RIGHT)
-                        nbrOfRight++;
-                    if (dataSet.get(i).getPinkyDir() == MOVE.NEUTRAL)
-                        nbrOfNeutral++;
+                for (DataTuple tuple:dataSet) {
+                    if (tuple.getPinkyDir() == MOVE.UP)
+                        nbrOfGhostUp++;
+                    else if (tuple.getPinkyDir() == MOVE.DOWN)
+                        nbrOfGhostDown++;
+                    else if (tuple.getPinkyDir() == MOVE.LEFT)
+                        nbrOfGhostLeft++;
+                    else
+                        nbrOfGhostRight++;
                 }
+                break;
             case SUE_DIR:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if (dataSet.get(i).getSueDir() == MOVE.UP)
-                        nbrOfUp++;
-                    if (dataSet.get(i).getSueDir() == MOVE.DOWN)
-                        nbrOfDown++;
-                    if (dataSet.get(i).getSueDir() == MOVE.LEFT)
-                        nbrOfLeft++;
-                    if (dataSet.get(i).getSueDir() == MOVE.RIGHT)
-                        nbrOfRight++;
-                    if (dataSet.get(i).getSueDir() == MOVE.NEUTRAL)
-                        nbrOfNeutral++;
+                for (DataTuple tuple:dataSet) {
+                    if (tuple.getSueDir() == MOVE.UP)
+                        nbrOfGhostUp++;
+                    else if (tuple.getSueDir() == MOVE.DOWN)
+                        nbrOfGhostDown++;
+                    else if (tuple.getSueDir() == MOVE.LEFT)
+                        nbrOfGhostLeft++;
+                    else
+                        nbrOfGhostRight++;
                 }
+                break;
         }
-        return nbrOfUp/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfUp))+
-                nbrOfDown/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfDown))+
-                nbrOfLeft/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfLeft))+
-                nbrOfRight/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfRight))+
-                nbrOfNeutral/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfNeutral));
+
+        double infoInTag=nbrOfGhostUp/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfGhostUp))+
+                         nbrOfGhostDown/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfGhostDown))+
+                         nbrOfGhostLeft/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfGhostLeft))+
+                         nbrOfGhostRight/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfGhostRight));
+
+        return infoInTag;
     }
 
     private double getDiscreteTagInfo(Attribute attribute) {
@@ -243,117 +262,111 @@ public class AttributeSelector {
         double nbrOfMedium=0;
         double nbrOfHigh=0;
         double nbrOfVeryHigh=0;
-        double nbrOfNone = 0;
 
         switch (attribute) {
             case PACMAN_POSITION:
-                for(int i=0; i<nbrOfTuples; i++) {
-                    if(dataSet.get(i).getPosition()==DataTuple.DiscreteTag.VERY_LOW)
+                for (DataTuple tuple:dataSet) {
+                    if(tuple.getPosition()==DataTuple.DiscreteTag.VERY_LOW)
                         nbrOfVeryLow++;
-                    if(dataSet.get(i).getPosition()==DataTuple.DiscreteTag.LOW)
+                    else if(tuple.getPosition()==DataTuple.DiscreteTag.LOW)
                         nbrOfLow++;
-                    if(dataSet.get(i).getPosition()==DataTuple.DiscreteTag.MEDIUM)
+                    else if(tuple.getPosition()==DataTuple.DiscreteTag.MEDIUM)
                         nbrOfMedium++;
-                    if(dataSet.get(i).getPosition()==DataTuple.DiscreteTag.HIGH)
+                    else if(tuple.getPosition()==DataTuple.DiscreteTag.HIGH)
                         nbrOfHigh++;
-                    if(dataSet.get(i).getPosition()==DataTuple.DiscreteTag.VERY_HIGH)
+                    else
                         nbrOfVeryHigh++;
-                    if (dataSet.get(i).getPosition()==DataTuple.DiscreteTag.NONE)
-                        nbrOfNone++;
                 }
                 break;
             case BLINKY_DISTANCE:
                 for(int i=0; i<nbrOfTuples; i++) {
                     if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.VERY_LOW)
                         nbrOfVeryLow++;
-                    if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.LOW)
+                    else if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.LOW)
                         nbrOfLow++;
-                    if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.MEDIUM)
+                    else if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.MEDIUM)
                         nbrOfMedium++;
-                    if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.HIGH)
+                    else if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.HIGH)
                         nbrOfHigh++;
-                    if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.VERY_HIGH)
+                    else
                         nbrOfVeryHigh++;
-                    if (dataSet.get(i).getBlinkyDistance() == DataTuple.DiscreteTag.NONE)
-                        nbrOfNone++;
+
                 }
                 break;
             case INKY_DISTANCE:
                 for(int i=0; i<nbrOfTuples; i++) {
                     if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.VERY_LOW)
                         nbrOfVeryLow++;
-                    if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.LOW)
+                    else if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.LOW)
                         nbrOfLow++;
-                    if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.MEDIUM)
+                    else if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.MEDIUM)
                         nbrOfMedium++;
-                    if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.HIGH)
+                    else if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.HIGH)
                         nbrOfHigh++;
-                    if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.VERY_HIGH)
+                    else
                         nbrOfVeryHigh++;
-                    if (dataSet.get(i).getInkyDistance() == DataTuple.DiscreteTag.NONE)
-                        nbrOfNone++;
                 }
                 break;
             case PINKY_DISTANCE:
                 for(int i=0; i<nbrOfTuples; i++) {
                     if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.VERY_LOW)
                         nbrOfVeryLow++;
-                    if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.LOW)
+                    else if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.LOW)
                         nbrOfLow++;
-                    if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.MEDIUM)
+                    else if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.MEDIUM)
                         nbrOfMedium++;
-                    if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.HIGH)
+                    else if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.HIGH)
                         nbrOfHigh++;
-                    if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.VERY_HIGH)
+                    else
                         nbrOfVeryHigh++;
-                    if (dataSet.get(i).getPinkyDistance() == DataTuple.DiscreteTag.NONE)
-                        nbrOfNone++;
                 }
                 break;
             case SUE_DISTANCE:
                 for(int i=0; i<nbrOfTuples; i++) {
                     if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.VERY_LOW)
                         nbrOfVeryLow++;
-                    if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.LOW)
+                    else if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.LOW)
                         nbrOfLow++;
-                    if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.MEDIUM)
+                    else if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.MEDIUM)
                         nbrOfMedium++;
-                    if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.HIGH)
+                    else if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.HIGH)
                         nbrOfHigh++;
-                    if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.VERY_HIGH)
+                    else
                         nbrOfVeryHigh++;
-                    if (dataSet.get(i).getSueDistance() == DataTuple.DiscreteTag.NONE)
-                        nbrOfNone++;
+
                 }
                 break;
         }
 
         double infoInTag=nbrOfVeryLow/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfVeryLow))+
-                nbrOfLow/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfLow))+
-                nbrOfMedium/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfMedium))+
-                nbrOfHigh/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfHigh))+
-                nbrOfVeryHigh/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfVeryHigh))+
-                nbrOfNone/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfNone));
+                         nbrOfLow/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfLow))+
+                         nbrOfMedium/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfMedium))+
+                         nbrOfHigh/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfHigh))+
+                         nbrOfVeryHigh/nbrOfTuples*(infoInDiscreteTagInfo(nbrOfVeryHigh));
+
         return infoInTag;
     }
 
     private double infoInDiscreteTagInfo(double nbrOfTags) {
-        double tagUp=(nbrOfUp/nbrOfTags)*minusLog2(nbrOfUp/nbrOfTags);
-        double tagDown=(nbrOfDown/nbrOfTags)*minusLog2(nbrOfDown/nbrOfTags);
-        double tagRight=(nbrOfRight/nbrOfTags)*minusLog2(nbrOfRight/nbrOfTags);
-        double tagLeft=(nbrOfLeft/nbrOfTags)*minusLog2(nbrOfLeft/nbrOfTags);
+
+        double tagUp=(nbrOfUp/nbrOfTags)*log2(nbrOfUp/nbrOfTags);
+        double tagDown=(nbrOfDown/nbrOfTags)*log2(nbrOfDown/nbrOfTags);
+        double tagRight=(nbrOfRight/nbrOfTags)*log2(nbrOfRight/nbrOfTags);
+        double tagLeft=(nbrOfLeft/nbrOfTags)*log2(nbrOfLeft/nbrOfTags);
+
         return -tagUp-tagDown-tagRight-tagLeft;
     }
 
-    private double minusLog2(double value) {
-        return (Math.log(value)/Math.log(2));
+    private double log2(double value) {
+        return  Math.log(value)/Math.log(2);
     }
 
-    private double getAverageInfo(double nbrOfTuples, double nbrOfLeft, double nbrOfRight, double nbrOfUp, double nbrOfDown) {
-        double infoInLeft=(nbrOfLeft/nbrOfTuples)*minusLog2(nbrOfLeft/nbrOfTuples);
-        double infoInRight=(nbrOfRight/nbrOfTuples)*minusLog2(nbrOfRight/nbrOfTuples);
-        double infoInUp=-(nbrOfUp/nbrOfTuples)*minusLog2(nbrOfUp/nbrOfTuples);
-        double infoInDown=(nbrOfDown/nbrOfTuples)*minusLog2(nbrOfDown/nbrOfTuples);
+    private double getAverageInfo() {
+        double infoInLeft=(nbrOfLeft/nbrOfTuples)*log2(nbrOfLeft/nbrOfTuples);
+        double infoInRight=(nbrOfRight/nbrOfTuples)*log2(nbrOfRight/nbrOfTuples);
+        double infoInUp=-(nbrOfUp/nbrOfTuples)*log2(nbrOfUp/nbrOfTuples);
+        double infoInDown=(nbrOfDown/nbrOfTuples)*log2(nbrOfDown/nbrOfTuples);
+
         return -infoInLeft-infoInRight-infoInUp-infoInDown;
     }
 }
